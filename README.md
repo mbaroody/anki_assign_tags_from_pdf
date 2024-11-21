@@ -1,0 +1,34 @@
+A script that takes a path to a PDF and an Anki tag as an input, and attempts to find the relevant cards from the [AnKing Step deck](https://www.ankihub.net/step-deck) and assign the specified tag.
+
+# Usage
+```bash
+usage: anki_assign_tags.py [-h] [--max-workers MAX_WORKERS] [--chunk-size CHUNK_SIZE] [--similarity-threshold SIMILARITY_THRESHOLD]
+                           [--anki-search-query ANKI_SEARCH_QUERY]
+                           pdf_path tag_name
+
+Find relevant Anki cards to PDF and add tag.
+
+positional arguments:
+  pdf_path              Path to the PDF file to process.
+  tag_name              tag name to apply
+
+options:
+  -h, --help            show this help message and exit
+  --max-workers MAX_WORKERS
+                        Number of parallel workers (default: 3).
+  --chunk-size CHUNK_SIZE
+                        Number of notes to process in a chunk (default: 12).
+  --similarity-threshold SIMILARITY_THRESHOLD
+                        Similarity threshold to use (default: 0.6).
+  --anki-search-query ANKI_SEARCH_QUERY
+                        Subset of cards to search from (default: "deck:AnKing Step Deck").
+```
+
+## Example
+```bash
+python anki_assign_tags.py \
+    /path/to/my/pdf.pdf \
+    Foundations_of_Disease::block_3::week_7::antimicrobials \
+    --max-workers 10 \
+    --chunk-size 500
+```
