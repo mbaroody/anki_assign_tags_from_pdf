@@ -1,8 +1,9 @@
-A script that takes a path to a PDF and an Anki tag as an input, and attempts to find the relevant cards from the [AnKing Step deck](https://www.ankihub.net/step-deck) and assign the specified tag.
+A script that takes a path to a PDF and an Anki tag as an input, and attempts to find the relevant cards from a specified subset of cards (default is `"deck:AnKing Step Deck"`, which assumes you have the [AnKing Step deck](https://www.ankihub.net/step-deck) installed) and assign the specified tag.
 
 # Requirements
 1. must have requirements installed with `pip install -r requirements.txt`
 2. must have Anki running and the [AnkiConnect add-on](https://ankiweb.net/shared/info/2055492159) installed
+3. must have the [AnKing Step deck](https://www.ankihub.net/step-deck) installed, or a deck named "AnKing Step Deck" in your collection, unless you plan on modifying the subset of cards to search for using the `--anki-search-query` flag (see below)
 
 # Usage
 ```bash
