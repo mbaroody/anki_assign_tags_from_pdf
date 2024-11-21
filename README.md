@@ -1,5 +1,9 @@
 A script that takes a path to a PDF and an Anki tag as an input, and attempts to find the relevant cards from the [AnKing Step deck](https://www.ankihub.net/step-deck) and assign the specified tag.
 
+# Requirements
+1. must have requirements installed with `pip install -r requirements.txt`
+2. must have Anki running and the [AnkiConnect add-on](https://ankiweb.net/shared/info/2055492159) installed
+
 # Usage
 ```bash
 usage: anki_assign_tags.py [-h] [--max-workers MAX_WORKERS] [--chunk-size CHUNK_SIZE] [--similarity-threshold SIMILARITY_THRESHOLD]
