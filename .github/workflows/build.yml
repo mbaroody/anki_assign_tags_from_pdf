@@ -28,14 +28,15 @@ jobs:
           pip install -r requirements.txt
 
       - name: Install ccache
+        if: matrix.os == 'ubuntu-latest'
         run: |
-          if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
             sudo apt-get update
             sudo apt-get install -y ccache
-          elif [ "${{ matrix.os }}" == "macos-latest" ]; then
+      - name: Install ccache
+        if: matrix.os == 'macos-latest'
+        run: |
             brew update
             brew install ccache
-          fi
 
       - name: Build Binary
         run: |
