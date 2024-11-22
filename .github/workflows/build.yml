@@ -6,9 +6,12 @@ on:
       - main
 
 jobs:
-  build-linux:
-    name: Build Binary for Linux
-    runs-on: ubuntu-latest
+  build:
+    name: build binaries
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -22,6 +25,17 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install nuitka
+          pip install -r requirements.txt
+
+      - name: Install ccache
+        run: |
+          if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
+            sudo apt-get update
+            sudo apt-get install -y ccache
+          elif [ "${{ matrix.os }}" == "macos-latest" ]; then
+            brew update
+            brew install ccache
+          fi
 
       - name: Build Binary
         run: |
@@ -30,62 +44,21 @@ jobs:
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
+        if: matrix.os == 'ubuntu-latest'
         with:
           name: linux-binary
-          path: dist/
-
-  build-windows:
-    name: Build Binary for Windows
-    runs-on: windows-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
-
-      - name: Install Dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install nuitka
-
-      - name: Build Binary
-        run: |
-          mkdir dist
-          python -m nuitka --standalone --onefile anki_assign_tags.py --output-dir=dist
+          path: dist/anki_assign_tags.bin
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
-        with:
-          name: windows-binary
-          path: dist/
-
-  build-macos:
-    name: Build Binary for macOS
-    runs-on: macos-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
-
-      - name: Install Dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install nuitka
-
-      - name: Build Binary
-        run: |
-          mkdir dist
-          python -m nuitka --standalone --onefile anki_assign_tags.py --output-dir=dist
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+        if: matrix.os == 'macos-latest'
         with:
           name: macos-binary
-          path: dist/
+          path: dist/anki_assign_tags.bin
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        if: matrix.os == 'windows-latest'
+        with:
+          name: windows-binary
+          path: dist/anki_assign_tags.bin
