@@ -1,0 +1,42 @@
+name: Release Binaries
+on:
+  workflow_run:
+    workflows:
+      - Build and Package Binaries
+    types:
+      - completed
+jobs:
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Download Linux Binary
+        uses: actions/download-artifact@v4
+        with:
+          name: linux-binary
+          path: binaries/
+
+      - name: Download macOS Binary
+        uses: actions/download-artifact@v4
+        with:
+          name: macos-binary
+          path: binaries/
+
+      - name: Download Windows Binary
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-binary
+          path: binaries/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            binaries/linux-binary/anki_assign_tags
+            binaries/macos-binary/anki_assign_tags
+            binaries/windows-binary/anki_assign_tags.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
